@@ -1,0 +1,16 @@
+Source: theftdeterrent4
+Section: admin
+Priority: extra
+Maintainer: Huayra Devs <huarya-devel@listas.huayragnulinux.com.ar>
+Build-Depends: debhelper (>= 9.0.0)
+Standards-Version: 3.9.6
+
+Package: theftdeterrentclient
+Pre-depends:theftdeterrentclient-lib
+Priority: extra
+Section: utils
+Maintainer: www.classmatepc.com
+Architecture: amd64
+Version: 4.7.30113.13494
+Description: Intel Education Theft Deterrent client Huayra package
+
