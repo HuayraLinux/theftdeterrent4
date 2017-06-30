@@ -1,6 +1,6 @@
 #!/bin/sh
 
 echo "Deleting symlinks in /usr/local"
-rm /usr/local/thefdeterrentclient
+rm -rf /usr/local/thefdeterrentclient
 
 exit 0

@@ -2,8 +2,8 @@
 
 trap 'exit 1' 1 2 15
 
-export curdir=$(cd "$(dirname "$0")"; pwd)
-export predir="theftdeterrentclient."
+export curdir="/usr/share/theftdeterrentclient"
+export predir=""
 
 . ${curdir}/${predir}funcdefine
 
