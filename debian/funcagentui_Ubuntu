@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/bin/sh
 
 . ${curdir}/${predir}funcutil
 
@@ -15,22 +15,6 @@ fn_agentuiinst() {
         rm -f ${td_roothome_dir}/${td_startup_dir}/${td_desktop_file} >> ${td_log_dir}/${td_log_file} 2>&1
         ln -s ${td_service_root}/${td_desktop_file} ${td_roothome_dir}/${td_startup_dir}/${td_desktop_file} >> ${td_log_dir}/${td_log_file} 2>&1
 
-        # normal users
-        for account in `LANG=C grep "/bin/bash" /etc/passwd | awk -F: '{print $1}'`
-        do
-            home_folder=$(eval echo ~${account})
-
-            su -c "mkdir -p ${home_folder}/${td_startup_dir}" ${account} >> ${td_log_dir}/${td_log_file} 2>&1
-            rm -f ${home_folder}/${td_startup_dir}/${td_desktop_file} >> ${td_log_dir}/${td_log_file} 2>&1
-            su -c "ln -s ${td_service_root}/${td_desktop_file} ${home_folder}/${td_startup_dir}/${td_desktop_file}" ${account} >> ${td_log_dir}/${td_log_file} 2>&1
-            chmod 777 -R ${home_folder}/${td_startup_dir} >> ${td_log_dir}/${td_log_file} 2>&1
-
-            chown ${account} -R ${home_folder} >> ${td_log_dir}/${td_log_file} 2>&1
-
-            # Register extension
-            echo "su -c \"gsettings set com.canonical.Unity.Panel systray-whitelist \"[\'all\']\"\" ${account}" >> ${td_log_dir}/${td_log_file} 2>&1
-            nohup su -c "gsettings set com.canonical.Unity.Panel systray-whitelist \"[\'all\']\"" ${account} >> ${td_log_dir}/${td_log_file} 2>&1 &
-        done
     fi
 
     # Permission settings
@@ -46,17 +30,4 @@ fn_agentuiinst() {
 fn_agentuiremove() {
     # root user
     rm -f ${td_roothome_dir}/${td_startup_dir}/${td_desktop_file} >> ${td_log_dir}/${td_log_file} 2>&1
-
-    # normal users
-    for account in `LANG=C grep "/bin/bash" /etc/passwd | awk -F: '{print $1}'`
-    do
-        home_folder=$(eval echo ~${account})
-
-        rm -f ${home_folder}/${td_startup_dir}/${td_desktop_file} >> ${td_log_dir}/${td_log_file} 2>&1
-        rm -fr ${home_folder}/${td_extension_base}/${td_extension_dir} >> ${td_log_dir}/${td_log_file} 2>&1
-
-        # Unregister extension
-        # echo "su -c \"gsettings set com.canonical.Unity.Panel systray-whitelist \"\"\" ${account}" >> ${td_log_dir}/${td_log_file} 2>&1
-        # nohup su -c "gsettings set com.canonical.Unity.Panel systray-whitelist \"\"" ${account} >> ${td_log_dir}/${td_log_file} 2>&1 &
-    done
 }

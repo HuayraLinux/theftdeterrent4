@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/bin/sh
 
 export curdir=/var/lib/dpkg/info
 export predir="theftdeterrentclient."

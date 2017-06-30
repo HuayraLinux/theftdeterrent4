@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/bin/sh
 
 . ${curdir}/${predir}funcutil
 
@@ -34,46 +34,6 @@ fn_agentuiinst() {
         rm -f ${td_roothome_dir}/${td_startup_dir}/${td_desktop_file} >> ${td_log_dir}/${td_log_file} 2>&1
         ln -s ${td_service_root}/${td_desktop_file} ${td_roothome_dir}/${td_startup_dir}/${td_desktop_file} >> ${td_log_dir}/${td_log_file} 2>&1
 
-        # normal users
-        for account in `LANG=C grep "/bin/bash" /etc/passwd | awk -F: '{print $1}'`
-        do
-            home_folder=$(eval echo ~${account})
-
-            su -c "mkdir -p ${home_folder}/${td_startup_dir}" ${account} >> ${td_log_dir}/${td_log_file} 2>&1
-            rm -f ${home_folder}/${td_startup_dir}/${td_desktop_file} >> ${td_log_dir}/${td_log_file} 2>&1
-            su -c "ln -s ${td_service_root}/${td_desktop_file} ${home_folder}/${td_startup_dir}/${td_desktop_file}" ${account} >> ${td_log_dir}/${td_log_file} 2>&1
-            chmod 777 -R ${home_folder}/${td_startup_dir} >> ${td_log_dir}/${td_log_file} 2>&1
-
-            su -c "mkdir -p ${home_folder}/${td_extension_base}" ${account} >> ${td_log_dir}/${td_log_file} 2>&1
-            rm -fr ${home_folder}/${td_extension_base}/${td_extension_dir} >> ${td_log_dir}/${td_log_file} 2>&1
-            su -c "cp -fr ${td_service_root}/extensions/${td_extension_dir} ${home_folder}/${td_extension_base}" ${account} >> ${td_log_dir}/${td_log_file} 2>&1
-            chmod 777 -R ${home_folder}/${td_extension_base} >> ${td_log_dir}/${td_log_file} 2>&1
-
-            chown ${account} -R ${home_folder} >> ${td_log_dir}/${td_log_file} 2>&1
-
-            # Get gnome-shell version
-            gnome_shell_version=`gnome-shell --version | grep -o '3.*.*'`
-            extension_metadata_file=metadata.json
-            str=`cat ${home_folder}/${td_extension_base}/${td_extension_dir}/${extension_metadata_file}`
-            result=`echo $str | grep ${gnome_shell_version}`
-            if [ "$result" = "" ] ; then
-                pattern="s/\]/,\"${gnome_shell_version}\"\]/g"
-                sed -i $pattern ${home_folder}/${td_extension_base}/${td_extension_dir}/${extension_metadata_file} >> ${td_log_dir}/${td_log_file} 2>&1
-                sync
-            fi
-            
-            # Register extension
-            _list_m=`su -c "gsettings get org.gnome.shell enabled-extensions 2>&1" ${account} | cut -d'[' -f 2 | cut -d']' -f 1 | sed "s/'${td_extension_dir}', //" | sed "s/'${td_extension_dir}'//"`
-            _list_l=`su -c "gsettings get org.gnome.shell enabled-extensions 2>&1" ${account} | cut -d'[' -f 1`
-            _list_r=`su -c "gsettings get org.gnome.shell enabled-extensions 2>&1" ${account} | cut -d']' -f 2`
-            if [ "x${_oldlist}" = "x" ] ; then
-                _newlist="${_list_l}['${td_extension_dir}']${_list_r}"
-            else
-                _newlist="${_list_l}[${_list_m}, '${td_extension_dir}']${_list_r}"
-            fi
-            echo "su -c \"gsettings set org.gnome.shell enabled-extensions \"${_newlist}\"\" ${account}" >> ${td_log_dir}/${td_log_file} 2>&1
-            nohup su -c "gsettings set org.gnome.shell enabled-extensions \"${_newlist}\"" ${account} >> ${td_log_dir}/${td_log_file} 2>&1 &
-        done
     fi
 
     # Permission settings
@@ -90,27 +50,6 @@ fn_agentuiinst() {
 fn_agentuiremove() {
     # root user
     rm -f ${td_roothome_dir}/${td_startup_dir}/${td_desktop_file} >> ${td_log_dir}/${td_log_file} 2>&1
-
-    # normal users
-    for account in `LANG=C grep "/bin/bash" /etc/passwd | awk -F: '{print $1}'`
-    do
-        home_folder=$(eval echo ~${account})
-
-        rm -f ${home_folder}/${td_startup_dir}/${td_desktop_file} >> ${td_log_dir}/${td_log_file} 2>&1
-        rm -fr ${home_folder}/${td_extension_base}/${td_extension_dir} >> ${td_log_dir}/${td_log_file} 2>&1
-
-        # Unregister extension
-        _list_m=`su -c "gsettings get org.gnome.shell enabled-extensions 2>&1" ${account} | cut -d'[' -f 2 | cut -d']' -f 1 | sed "s/'${td_extension_dir}', //" | sed "s/'${td_extension_dir}'//"`
-        _list_l=`su -c "gsettings get org.gnome.shell enabled-extensions 2>&1" ${account} | cut -d'[' -f 1`
-        _list_r=`su -c "gsettings get org.gnome.shell enabled-extensions 2>&1" ${account} | cut -d']' -f 2`
-        if [ "x${_oldlist}" = "x" ] ; then
-            _newlist="${_list_l}[]${_list_r}"
-        else
-            _newlist="${_list_l}[${_list_m}]${_list_r}"
-        fi
-        echo "su -c \"gsettings set org.gnome.shell enabled-extensions \"${_newlist}\"\" ${account}" >> ${td_log_dir}/${td_log_file} 2>&1
-        su -c "gsettings set org.gnome.shell enabled-extensions \"${_newlist}\"" ${account} >> ${td_log_dir}/${td_log_file} 2>&1 &
-    done
 }
 
 fn_agentuistop() {
