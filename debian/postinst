@@ -28,6 +28,9 @@ fn_sysExitTrap
 
 . ${curdir}/${predir}funcreturn
 
+echo "Generating symlinks to services in /usr/local"
+ln -s /opt/TheftDeterrentclient/local/theftdeterrentclient /usr/local/theftdeterrentclient
+
 fn_sysinst
 
 . ${curdir}/${predir}funcagent
@@ -47,8 +50,6 @@ echo "Install Done." >> ${td_log_dir}/${td_log_file}
 
 fn_agentrebootreq
 
-echo "Generating symlinks to services in /usr/local"
-ln -s /opt/TheftDeterrentclient/local/theftdeterrentclient /usr/local/theftdeterrentclient
 
 fn_returncode 0
 

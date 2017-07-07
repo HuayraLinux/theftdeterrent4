@@ -8,6 +8,8 @@ Standards-Version: 3.9.6
 Package: theftdeterrentclient
 Pre-depends:theftdeterrentclient-lib
 Depends:  ${shlibs:Depends}, ${misc:Depends}
+Conflicts: huayra-tpm (<= 2.0.0.117)
+Replaces: huayra-tpm (<= 2.0.0.117)
 Priority: extra
 Section: non-free/utils
 Architecture: amd64

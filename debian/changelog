@@ -1,3 +1,10 @@
+theftdeterrent4 (4.7.30113.13494.huayra2) torbellino; urgency=medium
+
+  * Desactivando el strip de los binarios
+  * Conflicto con huayra-tpm
+
+ -- Fernando Toledo <ragnarok@docksud.com.ar>  Fri, 07 Jul 2017 15:14:53 -0300
+
 theftdeterrent4 (4.7.30113.13494.huayra1) unstable; urgency=medium
 
   * Initial commit
