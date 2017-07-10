@@ -1,3 +1,9 @@
+theftdeterrent4 (4.7.30113.13494.huayra3) unstable; urgency=medium
+
+  * Pasar los parametros al binario del cliente que le llegan .run
+
+ -- Fernando Toledo <ragnarok@docksud.com.ar>  Mon, 10 Jul 2017 12:14:11 -0300
+
 theftdeterrent4 (4.7.30113.13494.huayra2) torbellino; urgency=medium
 
   * Desactivando el strip de los binarios
