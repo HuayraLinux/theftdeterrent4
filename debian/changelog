@@ -1,3 +1,9 @@
+theftdeterrent4 (4.7.30113.13494.huayra4) unstable; urgency=medium
+
+  * conflicto con tpmdaemon y fix de links viejos en /usr/local
+
+ -- Fernando Toledo <ragnarok@docksud.com.ar>  Wed, 12 Jul 2017 10:26:15 -0300
+
 theftdeterrent4 (4.7.30113.13494.huayra3) unstable; urgency=medium
 
   * Pasar los parametros al binario del cliente que le llegan .run
