@@ -1,3 +1,9 @@
+theftdeterrent4 (4.7.30113.13494.huayra5) unstable; urgency=medium
+
+  * bump version
+
+ -- Fernando Toledo <ragnarok@docksud.com.ar>  Wed, 12 Jul 2017 12:36:34 -0300
+
 theftdeterrent4 (4.7.30113.13494.huayra4) unstable; urgency=medium
 
   * conflicto con tpmdaemon y fix de links viejos en /usr/local
